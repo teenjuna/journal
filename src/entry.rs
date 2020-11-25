@@ -2,7 +2,7 @@ use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// An entry in a journal.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Entry {
     pub id: String,
     pub text: String,
@@ -41,6 +41,12 @@ pub enum Error {
 
     #[error("entry {0} is not found")]
     NotFound(String),
+
+    #[error(transparent)]
+    IOError(#[from] std::io::Error),
+
+    #[error(transparent)]
+    JsonError(#[from] serde_json::Error),
 }
 
 #[cfg(test)]

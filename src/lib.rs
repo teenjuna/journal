@@ -1,5 +1,6 @@
-mod entry;
-mod plain;
+pub mod entry;
+pub mod json;
+pub mod plain;
 
 use entry::EntryStorage;
 use plain::PlainJournal;
