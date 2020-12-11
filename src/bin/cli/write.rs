@@ -15,13 +15,13 @@ pub struct Opts {}
 pub fn execute<E: EntryStorage>(mut journal: Journal<E>, _opts: Opts) -> Result<()> {
     // Get the previous version of the today's entry (if exists).
     let id = Local::now().format("%d.%m.%y").to_string();
-    let prev_text = match &mut journal {
+    let prev_text = match &journal {
         Journal::Plain(j) => match j.get_entry(&id) {
             Ok(e) => e.text,
             Err(jerr) => match jerr {
-                journal::plain::Error::EntryError(eerr) => match eerr {
+                journal::plain::Error::EntryError(ref eerr) => match eerr {
                     journal::entry::Error::NotFound(_) => "".to_string(),
-                    _ => return Err(anyhow!(eerr)),
+                    _ => return Err(anyhow!(jerr)),
                 },
             },
         },
