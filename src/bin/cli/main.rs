@@ -1,3 +1,4 @@
+mod list;
 mod write;
 
 use anyhow::{anyhow, Result};
@@ -15,6 +16,7 @@ struct Opts {
 #[derive(Clap)]
 enum SubCommand {
     Write(write::Opts),
+    List(list::Opts),
 }
 
 fn main() -> Result<()> {
@@ -35,6 +37,7 @@ fn main() -> Result<()> {
     let opts = Opts::parse();
     match opts.subcmd {
         SubCommand::Write(opts) => write::execute(journal, opts)?,
+        SubCommand::List(opts) => list::execute(journal, opts)?,
     }
 
     Ok(())
