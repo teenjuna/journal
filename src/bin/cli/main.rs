@@ -1,4 +1,5 @@
 mod list;
+mod read;
 mod write;
 
 use anyhow::{anyhow, Result};
@@ -17,6 +18,7 @@ struct Opts {
 enum SubCommand {
     Write(write::Opts),
     List(list::Opts),
+    Read(read::Opts),
 }
 
 fn main() -> Result<()> {
@@ -38,6 +40,7 @@ fn main() -> Result<()> {
     match opts.subcmd {
         SubCommand::Write(opts) => write::execute(journal, opts)?,
         SubCommand::List(opts) => list::execute(journal, opts)?,
+        SubCommand::Read(opts) => read::execute(journal, opts)?,
     }
 
     Ok(())
