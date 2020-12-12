@@ -1,3 +1,4 @@
+mod delete;
 mod list;
 mod read;
 mod write;
@@ -19,6 +20,7 @@ enum SubCommand {
     Write(write::Opts),
     List(list::Opts),
     Read(read::Opts),
+    Delete(delete::Opts),
 }
 
 fn main() -> Result<()> {
@@ -41,6 +43,7 @@ fn main() -> Result<()> {
         SubCommand::Write(opts) => write::execute(journal, opts)?,
         SubCommand::List(opts) => list::execute(journal, opts)?,
         SubCommand::Read(opts) => read::execute(journal, opts)?,
+        SubCommand::Delete(opts) => delete::execute(journal, opts)?,
     }
 
     Ok(())
