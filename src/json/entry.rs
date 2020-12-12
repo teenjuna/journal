@@ -1,13 +1,13 @@
 use crate::entry::{Entry, EntryStorage, Error as EntryError};
 use anyhow::{Context, Result};
 use std::collections::VecDeque;
-use std::fs::{File, OpenOptions};
-use std::io::{self, prelude::*, SeekFrom};
-use std::path::Path;
+use std::fs::OpenOptions;
+use std::io;
+use std::path::{Path, PathBuf};
 
 /// A json-file storage for entries.
 pub struct JsonEntryStorage {
-    file: File,
+    path: PathBuf,
     entries: VecDeque<Entry>,
 }
 
@@ -25,12 +25,21 @@ impl JsonEntryStorage {
             Err(err) => Err(err).context("failed to read json file"),
         }?;
 
-        Ok(Self { file, entries })
+        Ok(Self {
+            path: path.to_path_buf(),
+            entries,
+        })
     }
 
     fn sync_file(&mut self) -> io::Result<()> {
-        self.file.seek(SeekFrom::Start(0))?;
-        serde_json::to_writer_pretty(&self.file, &self.entries)?;
+        let file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .truncate(true)
+            .open(&self.path)?;
+
+        serde_json::to_writer_pretty(&file, &self.entries)?;
+
         Ok(())
     }
 }
