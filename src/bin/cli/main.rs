@@ -3,7 +3,7 @@ mod list;
 mod read;
 mod write;
 
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, Context, Result};
 use clap::Clap;
 use directories::BaseDirs;
 use std::fs;
@@ -34,7 +34,8 @@ fn main() -> Result<()> {
 
     // Create journal instance.
     let journal = {
-        let entry_storage = journal::json::JsonEntryStorage::new(Path::new(&entries_file))?;
+        let entry_storage = journal::json::JsonEntryStorage::new(Path::new(&entries_file))
+            .context("failed to open entry storage")?;
         journal::Journal::new(entry_storage)
     };
 

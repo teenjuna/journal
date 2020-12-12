@@ -1,4 +1,5 @@
 use crate::entry::{Entry, EntryStorage, Error as EntryError};
+use anyhow::{Context, Result};
 use std::collections::VecDeque;
 use std::fs::{File, OpenOptions};
 use std::io::{self, prelude::*, SeekFrom};
@@ -11,7 +12,7 @@ pub struct JsonEntryStorage {
 }
 
 impl JsonEntryStorage {
-    pub fn new(path: &Path) -> io::Result<Self> {
+    pub fn new(path: &Path) -> Result<Self> {
         let file = OpenOptions::new()
             .read(true)
             .write(true)
@@ -21,7 +22,7 @@ impl JsonEntryStorage {
         let entries = match serde_json::from_reader(&file) {
             Ok(entries) => Ok(entries),
             Err(err) if err.is_eof() => Ok(VecDeque::new()),
-            Err(err) => Err(err),
+            Err(err) => Err(err).context("failed to read json file"),
         }?;
 
         Ok(Self { file, entries })
