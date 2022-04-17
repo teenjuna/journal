@@ -1,10 +1,10 @@
 use anyhow::Result;
-use clap::Clap;
+use clap::Args;
 use journal::entry::EntryStorage;
 use journal::Journal;
 
 /// Opens an entry
-#[derive(Clap)]
+#[derive(Args)]
 pub struct Opts {
     /// ID of the entry to open
     #[clap(name = "ID")]

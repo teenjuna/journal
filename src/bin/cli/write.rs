@@ -1,18 +1,20 @@
 use anyhow::{anyhow, Result};
 use chrono::Local;
-use clap::Clap;
+use clap::Args;
 use journal::entry::{Entry, EntryStorage};
 use journal::Journal;
-use std::env;
-use std::fs;
 use std::process::Command;
+use std::{env, fs};
 use tempfile::NamedTempFile;
 
 /// Opens an editor for the today's entry
-#[derive(Clap)]
+#[derive(Args)]
 pub struct Opts {}
 
-pub fn execute<E: EntryStorage>(mut journal: Journal<E>, _opts: Opts) -> Result<()> {
+pub fn execute<E: EntryStorage>(
+    mut journal: Journal<E>,
+    _opts: Opts,
+) -> Result<()> {
     // Get the previous version of the today's entry (if exists).
     let id = Local::now().format("%d.%m.%y").to_string();
     let prev_text = match &journal {
@@ -61,8 +63,12 @@ fn get_editor_command() -> Result<String> {
             }
         }
         Err(err) => match err {
-            env::VarError::NotPresent => Err(anyhow!("EDITOR variable is not present")),
-            env::VarError::NotUnicode(_) => Err(anyhow!("EDITOR variable contains invalid data")),
+            env::VarError::NotPresent => {
+                Err(anyhow!("EDITOR variable is not present"))
+            }
+            env::VarError::NotUnicode(_) => {
+                Err(anyhow!("EDITOR variable contains invalid data"))
+            }
         },
     }
 }

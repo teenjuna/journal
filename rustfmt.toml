@@ -1,0 +1,5 @@
+imports_granularity = "Module"
+max_width = 80
+wrap_comments = true
+group_imports = "One"
+

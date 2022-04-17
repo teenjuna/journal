@@ -90,7 +90,8 @@ impl EntryStorage for JsonEntryStorage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use chrono::{prelude::*, Duration};
+    use chrono::prelude::*;
+    use chrono::Duration;
     use std::path::PathBuf;
     use tempfile::NamedTempFile;
 
@@ -117,7 +118,9 @@ mod tests {
         let entry1 = Entry::new("some text", Local::now()).unwrap();
         let entry1 = storage.save(entry1).unwrap();
 
-        let entry2 = Entry::new("another text", Local::now() + Duration::days(2)).unwrap();
+        let entry2 =
+            Entry::new("another text", Local::now() + Duration::days(2))
+                .unwrap();
         let entry2 = storage.save(entry2).unwrap();
 
         // Our list of entries now must contain two.
