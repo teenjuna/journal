@@ -2,7 +2,7 @@
 authors = ["Alex Ryapolov <ryapolov@pm.me>"]
 edition = "2018"
 name = "journal"
-version = "0.3.0"
+version = "0.3.1"
 
 [[bin]]
 name = "journal"
